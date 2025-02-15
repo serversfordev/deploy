@@ -12,22 +12,27 @@ tasks:
       - task: lint
       - task: test
 
-  fmt:
+  check:fmt:
     desc: Format all Go files
     cmds:
       - go fmt ./...
 
-  vet:
+  check:vet:
     desc: Run go vet on all packages
     cmds:
       - go vet ./...
 
-  lint:
+  check:lint:
     desc: Run golangci-lint
     cmds:
       - golangci-lint run
 
-  test:
+  check:test:
     desc: Run tests
     cmds:
       - go test {{.TEST_FLAGS}} ./...
+
+  release:test:
+    desc: Test the release
+    cmds:
+      - goreleaser release --snapshot --clean

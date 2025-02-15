@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/urfave/cli/v2"
 
@@ -15,9 +16,16 @@ import (
 	"github.com/serversfordev/deploy/internal/utils"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 var app = &cli.App{
-	Name:  "deploy",
-	Usage: "a simple application deployment tool",
+	Name:    "deploy",
+	Usage:   "a simple application deployment tool",
+	Version: version,
 	Commands: []*cli.Command{
 		{
 			Name:   "init",
@@ -48,6 +56,11 @@ var app = &cli.App{
 					Value: false,
 				},
 			},
+		},
+		{
+			Name:   "version",
+			Usage:  "print version information",
+			Action: versionCommand,
 		},
 	},
 }
@@ -118,6 +131,16 @@ func startCommand(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func versionCommand(c *cli.Context) error {
+	fmt.Printf("Version:    %s\n", version)
+	fmt.Printf("Commit:     %s\n", commit)
+	fmt.Printf("Built:      %s\n", date)
+	fmt.Printf("Go version: %s\n", runtime.Version())
+	fmt.Printf("OS/Arch:    %s/%s\n", runtime.GOOS, runtime.GOARCH)
 
 	return nil
 }

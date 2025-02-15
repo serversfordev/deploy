@@ -10,3 +10,8 @@ devenv.local.nix
 
 # Test directory
 cmd/deploy/testdata/
+
+dist/
+main
+deploy
+deploy-*
