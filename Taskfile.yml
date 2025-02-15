@@ -36,3 +36,23 @@ tasks:
     desc: Test the release
     cmds:
       - goreleaser release --snapshot --clean
+
+  release:version:
+    desc: Show current version
+    cmds:
+      - svu current
+
+  release:patch:
+    desc: Bump patch version
+    cmds:
+      - svu patch
+
+  release:minor:
+    desc: Bump minor version
+    cmds:
+      - svu minor
+
+  release:major:
+    desc: Bump major version
+    cmds:
+      - svu major
