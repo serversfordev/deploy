@@ -1,4 +1,4 @@
-module github.com/zsoltkacsandi/deploy
+module github.com/serversfordev/deploy
 
 go 1.23.3
 

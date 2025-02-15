@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zsoltkacsandi/deploy/internal/config"
+	"github.com/serversfordev/deploy/internal/config"
 )
 
 type GitProvider struct {

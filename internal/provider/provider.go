@@ -3,8 +3,8 @@ package provider
 import (
 	"fmt"
 
-	"github.com/zsoltkacsandi/deploy/internal/config"
-	"github.com/zsoltkacsandi/deploy/internal/provider/git"
+	"github.com/serversfordev/deploy/internal/config"
+	"github.com/serversfordev/deploy/internal/provider/git"
 )
 
 type Provider interface {

@@ -6,13 +6,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/zsoltkacsandi/deploy/internal/config"
-	"github.com/zsoltkacsandi/deploy/internal/deployer"
-	"github.com/zsoltkacsandi/deploy/internal/logger"
-	"github.com/zsoltkacsandi/deploy/internal/provider"
-	"github.com/zsoltkacsandi/deploy/internal/utils"
-
 	"github.com/urfave/cli/v2"
+
+	"github.com/serversfordev/deploy/internal/config"
+	"github.com/serversfordev/deploy/internal/deployer"
+	"github.com/serversfordev/deploy/internal/logger"
+	"github.com/serversfordev/deploy/internal/provider"
+	"github.com/serversfordev/deploy/internal/utils"
 )
 
 var app = &cli.App{

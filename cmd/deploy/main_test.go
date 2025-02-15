@@ -9,7 +9,8 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.com/zsoltkacsandi/deploy/internal/config"
+
+	"github.com/serversfordev/deploy/internal/config"
 )
 
 var (

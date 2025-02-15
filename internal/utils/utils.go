@@ -8,7 +8,8 @@ import (
 	"unicode"
 
 	"github.com/BurntSushi/toml"
-	"github.com/zsoltkacsandi/deploy/internal/config"
+
+	"github.com/serversfordev/deploy/internal/config"
 )
 
 // NormalizeAppName sanitizes the input string to contain only letters, digits,

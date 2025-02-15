@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/zsoltkacsandi/deploy/internal/config"
-	"github.com/zsoltkacsandi/deploy/internal/hook"
-	"github.com/zsoltkacsandi/deploy/internal/lock"
-	"github.com/zsoltkacsandi/deploy/internal/logger"
-	"github.com/zsoltkacsandi/deploy/internal/provider"
-	"github.com/zsoltkacsandi/deploy/internal/release"
+	"github.com/serversfordev/deploy/internal/config"
+	"github.com/serversfordev/deploy/internal/hook"
+	"github.com/serversfordev/deploy/internal/lock"
+	"github.com/serversfordev/deploy/internal/logger"
+	"github.com/serversfordev/deploy/internal/provider"
+	"github.com/serversfordev/deploy/internal/release"
 )
 
 type State string
