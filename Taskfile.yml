@@ -1,0 +1,33 @@
+version: '3'
+
+vars:
+  TEST_FLAGS: -race -failfast -v
+
+tasks:
+  check:
+    desc: Run all code quality checks
+    cmds:
+      - task: fmt
+      - task: vet
+      - task: lint
+      - task: test
+
+  fmt:
+    desc: Format all Go files
+    cmds:
+      - go fmt ./...
+
+  vet:
+    desc: Run go vet on all packages
+    cmds:
+      - go vet ./...
+
+  lint:
+    desc: Run golangci-lint
+    cmds:
+      - golangci-lint run
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test {{.TEST_FLAGS}} ./...
