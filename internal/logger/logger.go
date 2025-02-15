@@ -44,5 +44,5 @@ func (l *Logger) Printf(format string, v ...interface{}) {
 	message := fmt.Sprintf(format+"\n", v...)
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	formattedMessage := fmt.Sprintf("[%s] %s", timestamp, message)
-	l.Write([]byte(formattedMessage))
+	_, _ = l.Write([]byte(formattedMessage))
 }

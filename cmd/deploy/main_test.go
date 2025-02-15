@@ -113,9 +113,20 @@ func NewTestEnv(baseDir string, name string) (*testEnv, error) {
 
 	// create a git repository
 	gitDir := filepath.Join(dir, "repo")
-	os.MkdirAll(gitDir, 0755)
-	runGitCommand(gitDir, "init")
-	runGitCommand(gitDir, "branch", "-m", "main")
+	err = os.MkdirAll(gitDir, 0755)
+	if err != nil {
+		return nil, err
+	}
+
+	err = runGitCommand(gitDir, "init")
+	if err != nil {
+		return nil, err
+	}
+
+	err = runGitCommand(gitDir, "branch", "-m", "main")
+	if err != nil {
+		return nil, err
+	}
 
 	return &testEnv{
 		Dir: dir,
@@ -132,15 +143,22 @@ func (t testEnv) InitApp() (string, error) {
 }
 
 func (t testEnv) CommitFile(filename string) error {
-	filePath := filepath.Join(t.Dir, "repo", filename)
+	repoDir := filepath.Join(t.Dir, "repo")
+	filePath := filepath.Join(repoDir, filename)
 	err := os.WriteFile(filePath, []byte("test content"), 0644)
 	if err != nil {
 		return err
 	}
 
-	runGitCommand(t.Dir, "add", filename)
-	runGitCommand(t.Dir, "commit", "-m", "add "+filename)
+	err = runGitCommand(repoDir, "add", filename)
+	if err != nil {
+		return err
+	}
 
+	err = runGitCommand(repoDir, "commit", "-m", "add "+filename)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -179,6 +197,7 @@ func (t testEnv) CreateHooks() error {
 func runGitCommand(dir string, args ...string) error {
 	cmd := exec.Command("git", args...)
 	cmd.Dir = dir
+
 	err := cmd.Run()
 	if err != nil {
 		return err
