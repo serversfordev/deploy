@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - ci/use-devenv
     tags:
       - 'v*'
   pull_request:
@@ -18,42 +19,46 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v26
+      - uses: cachix/cachix-action@v14
+        with:
+          name: devenv
+      - name: Install devenv.sh
+        run: nix profile install nixpkgs#devenv
+
+      - name: Build the devenv shell and run any pre-commit hooks
+        run: devenv test
+
+      - name: Run a single command in the devenv shell
+        run: devenv shell task check
+
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.23'
-          cache: true
+  #build-and-release:
+  #  needs: test
+  #  if: startsWith(github.ref, 'refs/tags/v')
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@v4
 
-      - name: Run tests
-        run: |
-          go test -v ./cmd/deploy/...
+  #  - name: Set up Go
+  #    uses: actions/setup-go@v5
+  #    with:
+  #      go-version: '1.23'
+  #      cache: true
 
-  build-and-release:
-    needs: test
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #  - name: Build binaries
+  #    run: |
+  #      GOOS=linux GOARCH=amd64 go build -o deploy-linux-amd64 cmd/deploy/main.go
+  #      GOOS=linux GOARCH=arm64 go build -o deploy-linux-arm64 cmd/deploy/main.go
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.23'
-          cache: true
-
-      - name: Build binaries
-        run: |
-          GOOS=linux GOARCH=amd64 go build -o deploy-linux-amd64 cmd/deploy/main.go
-          GOOS=linux GOARCH=arm64 go build -o deploy-linux-arm64 cmd/deploy/main.go
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            deploy-linux-amd64
-            deploy-linux-arm64
-          generate_release_notes: true
+  #  - name: Create Release
+  #    uses: softprops/action-gh-release@v1
+  #    with:
+  #      files: |
+  #        deploy-linux-amd64
+  #        deploy-linux-arm64
+  #      generate_release_notes: true
