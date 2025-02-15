@@ -17,8 +17,15 @@ func UpdateCurrent(appDir string, releaseDir string) error {
 
 	// Set previous symlink if current exists
 	if currentSymlinkTarget, err := os.Readlink(currentSymlink); err == nil {
-		os.Remove(previousSymlink)
-		os.Symlink(currentSymlinkTarget, previousSymlink)
+		err = os.Remove(previousSymlink)
+		if err != nil {
+			return fmt.Errorf("failed to remove previous symlink: %w", err)
+		}
+
+		err = os.Symlink(currentSymlinkTarget, previousSymlink)
+		if err != nil {
+			return fmt.Errorf("failed to create previous symlink: %w", err)
+		}
 	}
 
 	tmpLink := currentSymlink + ".tmp"
