@@ -113,12 +113,12 @@ func NewTestEnv(baseDir string, name string) (*testEnv, error) {
 
 	// set git author name and email if it is running on CI
 	if os.Getenv("ENVIRONMENT") == "CI" {
-		err = runGitCommand(dir, "config", "user.name", "test")
+		err = runGitCommand(dir, "config", "--global", "user.name", "test")
 		if err != nil {
 			return nil, err
 		}
 
-		err = runGitCommand(dir, "config", "user.email", "test@example.com")
+		err = runGitCommand(dir, "config", "--global", "user.email", "test@example.com")
 		if err != nil {
 			return nil, err
 		}
