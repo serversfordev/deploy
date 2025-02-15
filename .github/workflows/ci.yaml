@@ -17,6 +17,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: CI
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

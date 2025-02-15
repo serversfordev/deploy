@@ -111,11 +111,37 @@ func NewTestEnv(baseDir string, name string) (*testEnv, error) {
 		return nil, err
 	}
 
+	// set git author name and email if it is running on CI
+	if os.Getenv("ENVIRONMENT") == "CI" {
+		fmt.Println("CI environment detected, setting git author name and email")
+
+		err = runGitCommand(dir, "config", "--global", "user.name", "test")
+		if err != nil {
+			return nil, err
+		}
+
+		err = runGitCommand(dir, "config", "--global", "user.email", "test@example.com")
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	// create a git repository
 	gitDir := filepath.Join(dir, "repo")
-	os.MkdirAll(gitDir, 0755)
-	runGitCommand(gitDir, "init")
-	runGitCommand(gitDir, "branch", "-m", "main")
+	err = os.MkdirAll(gitDir, 0755)
+	if err != nil {
+		return nil, err
+	}
+
+	err = runGitCommand(gitDir, "init")
+	if err != nil {
+		return nil, err
+	}
+
+	err = runGitCommand(gitDir, "branch", "-m", "main")
+	if err != nil {
+		return nil, err
+	}
 
 	return &testEnv{
 		Dir: dir,
@@ -132,15 +158,22 @@ func (t testEnv) InitApp() (string, error) {
 }
 
 func (t testEnv) CommitFile(filename string) error {
-	filePath := filepath.Join(t.Dir, "repo", filename)
+	repoDir := filepath.Join(t.Dir, "repo")
+	filePath := filepath.Join(repoDir, filename)
 	err := os.WriteFile(filePath, []byte("test content"), 0644)
 	if err != nil {
 		return err
 	}
 
-	runGitCommand(t.Dir, "add", filename)
-	runGitCommand(t.Dir, "commit", "-m", "add "+filename)
+	err = runGitCommand(repoDir, "add", filename)
+	if err != nil {
+		return err
+	}
 
+	err = runGitCommand(repoDir, "commit", "-m", "add "+filename)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -179,9 +212,10 @@ func (t testEnv) CreateHooks() error {
 func runGitCommand(dir string, args ...string) error {
 	cmd := exec.Command("git", args...)
 	cmd.Dir = dir
-	err := cmd.Run()
+
+	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return err
+		return fmt.Errorf("git command failed: %w\n%s", err, string(output))
 	}
 
 	return nil

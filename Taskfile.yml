@@ -5,7 +5,7 @@ vars:
 
 tasks:
   check:
-    desc: Run all code quality checks
+    desc: Run fmt and code quality checks
     cmds:
       - task: fmt
       - task: vet
