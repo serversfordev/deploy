@@ -18,6 +18,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: CI
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v26
