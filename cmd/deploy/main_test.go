@@ -198,9 +198,9 @@ func runGitCommand(dir string, args ...string) error {
 	cmd := exec.Command("git", args...)
 	cmd.Dir = dir
 
-	err := cmd.Run()
+	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return err
+		return fmt.Errorf("git command failed: %w\n%s", err, string(output))
 	}
 
 	return nil
